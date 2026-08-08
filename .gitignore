@@ -1,0 +1,13 @@
+# Gradle
+.gradle/
+build/
+**/build/
+local.properties
+.idea/
+*.iml
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+!apps/portable/build/outputs/apk/debug/*.apk
