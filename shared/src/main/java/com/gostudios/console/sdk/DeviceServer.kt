@@ -84,6 +84,7 @@ object DeviceServer {
 
             val queryIdx = rawPath.indexOf('?')
             val path = if (queryIdx >= 0) rawPath.substring(0, queryIdx) else rawPath
+            val query = if (queryIdx >= 0) rawPath.substring(queryIdx + 1) else ""
 
             // Headers + body
             val headers = HashMap<String, String>()
@@ -101,7 +102,12 @@ object DeviceServer {
             }
             val body = if (contentLength > 0) readBody(`in`, contentLength) else ""
 
-            val (code, json) = route(method, path, body)
+            if (method == "OPTIONS") {
+                writeResponse(out, 204, "", hasBody = false)
+                return
+            }
+
+            val (code, json) = route(method, path, body, query)
             writeResponse(out, code, json)
         } catch (e: Exception) {
         } finally {
@@ -132,9 +138,9 @@ object DeviceServer {
         return String(out.toByteArray(), Charsets.UTF_8)
     }
 
-    private fun route(method: String, path: String, body: String): Pair<Int, String> {
+    private fun route(method: String, path: String, body: String, query: String): Pair<Int, String> {
         return when {
-            path.startsWith("/api/acc/") -> handleAcc(method, path.removePrefix("/api/acc/"), body)
+            path.startsWith("/api/acc/") -> handleAcc(method, path.removePrefix("/api/acc/"), body, query)
             path == "/api/goai" -> handleGoAi(body)
             path == "/api/info" -> handleInfo()
             else -> 404 to """{"ok":false,"error":"unknown"}"""
@@ -159,10 +165,11 @@ object DeviceServer {
         return 200 to JSONObject().put("reply", reply).toString()
     }
 
-    private fun handleAcc(method: String, sub: String, body: String): Pair<Int, String> {
+    private fun handleAcc(method: String, sub: String, body: String, query: String): Pair<Int, String> {
         val store = store ?: return 500 to """{"ok":false}"""
         val endpoint = sub.split("/")[0]
-        val token = try { JSONObject(body).optString("token") } catch (e: Exception) { "" }
+        var token = try { JSONObject(body).optString("token") } catch (e: Exception) { "" }
+        if (token.isEmpty()) token = queryValue(query, "token") ?: ""
 
         return when {
             endpoint == "register" && method == "POST" -> {
@@ -207,10 +214,21 @@ object DeviceServer {
         }
     }
 
-    private fun writeResponse(out: java.io.OutputStream, code: Int, json: String) {
+    private fun queryValue(query: String, key: String): String? {
+        for (pair in query.split("&")) {
+            if (pair.isEmpty()) continue
+            val eq = pair.indexOf('=')
+            val k = if (eq >= 0) pair.substring(0, eq) else pair
+            if (k == key) return if (eq >= 0) pair.substring(eq + 1) else ""
+        }
+        return null
+    }
+
+    private fun writeResponse(out: java.io.OutputStream, code: Int, json: String, hasBody: Boolean = true) {
         val bytes = json.toByteArray(Charsets.UTF_8)
         val statusLine = when (code) {
             200 -> "HTTP/1.1 200 OK"
+            204 -> "HTTP/1.1 204 No Content"
             400 -> "HTTP/1.1 400 Bad Request"
             401 -> "HTTP/1.1 401 Unauthorized"
             404 -> "HTTP/1.1 404 Not Found"
@@ -218,14 +236,14 @@ object DeviceServer {
         }
         val header = "$statusLine\r\n" +
             "Content-Type: application/json; charset=utf-8\r\n" +
-            "Content-Length: ${bytes.size}\r\n" +
+            (if (hasBody) "Content-Length: ${bytes.size}\r\n" else "Content-Length: 0\r\n") +
             "Connection: close\r\n" +
             "Access-Control-Allow-Origin: *\r\n" +
             "Access-Control-Allow-Headers: Content-Type\r\n" +
-            "Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS\r\n" +
+            "Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS\r\n" +
             "\r\n"
         out.write(header.toByteArray(Charsets.US_ASCII))
-        out.write(bytes)
+        if (hasBody) out.write(bytes)
         out.flush()
     }
 }
