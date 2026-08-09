@@ -11,8 +11,8 @@ android {
         applicationId = "com.gostudios.console.portable"
         minSdk = 23
         targetSdk = 35
-        versionCode = 17
-        versionName = "1.0.0"
+        versionCode = 18
+        versionName = "1.1.0"
         vectorDrawables { useSupportLibrary = true }
     }
 

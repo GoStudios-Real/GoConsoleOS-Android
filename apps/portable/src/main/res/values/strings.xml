@@ -3,6 +3,7 @@
     <string name="app_name">GoConsoleOS Portable</string>
     <string name="home">Home</string>
     <string name="status_scanning">Searching for your GoConsoleOS on Wi-Fi…</string>
+    <string name="status_server">On-device server running · ACC API + GoAI on port %1$d</string>
     <string name="status_connected">Connected to %1$s</string>
     <string name="status_no_host">No GoConsoleOS hosts found. Open GoConsoleOS Link on your PC first.</string>
     <string name="btn_link">GoConsoleOS Link</string>

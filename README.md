@@ -11,6 +11,7 @@ which bundles four companion services on one device:
 | 📡 **GoConsoleOS Link** | LAN transport to browse and launch the host's game library over the same Wi-Fi (Steam Link style) |
 | 🛡️ **USB Health** | Local on-device volume & health check plus the host's deep SMART report for portable USB drives (Android 13/16) |
 | 📺 **GoConsoleOS Cast** | Screen-cast the device to the host / TV via the same transport |
+| 🖧 **On-device server** | The device hosts its own **ACC** account API + **GoAI** assistant on HTTP port **39210** (`/api/acc/*`, `/api/goai`, `/api/info`) — same as the desktop console |
 
 ## Project layout
 

@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.gostudios.console.portable.cast.MediaProjectionActivity
 import com.gostudios.console.sdk.ConsoleHost
+import com.gostudios.console.sdk.DeviceServer
 import com.gostudios.console.sdk.Discovery
 import com.gostudios.console.sdk.LinkClient
 import com.gostudios.console.sdk.Protocol
@@ -24,6 +25,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        DeviceServer.start(applicationContext)
+        findViewById<TextView>(R.id.txtServer).text =
+            getString(R.string.status_server, DeviceServer.PORT)
 
         findViewById<LinearLayout>(R.id.btnLink).setOnClickListener {
             activeHost?.let { startActivity(LinkActivity.intent(this, it)) }
@@ -69,6 +74,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        DeviceServer.stop()
         scanner?.stop()
         super.onDestroy()
     }
