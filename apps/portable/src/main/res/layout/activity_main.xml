@@ -23,7 +23,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Companion for GoConsoleOS on USB · Android & Google TV"
+            android:text="Companion for GoConsoleOS on USB · Android &amp; Google TV"
             android:textColor="#7A80A0"
             android:textSize="13sp"
             android:layout_marginBottom="24dp" />

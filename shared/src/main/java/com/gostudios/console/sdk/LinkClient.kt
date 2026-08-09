@@ -58,7 +58,7 @@ class LinkClient(
                 .put("id", Protocol.MAGIC)
                 .put("version", Protocol.VERSION)
                 .put("client", "go-console"))
-            onConnected(host)
+            listener.onConnected(host)
 
 // read loop
             val lenBuf = ByteArray(4)
@@ -78,23 +78,24 @@ class LinkClient(
                     if (text.isNotEmpty()) {
                         val obj = JSONObject(text)
                         val type = obj.optString("type", "")
-                        onControl(type, obj)
+                        listener.onControl(type, obj)
                     }
                 } else {
                     // binary frame: type byte already consumed
+                    val header = ByteArray(4)
                     readFully(rawIn, header, 0, 4)
                     val len = ((header[0].toInt() and 0xFF) shl 24) or
                         ((header[1].toInt() and 0xFF) shl 16) or
                         ((header[2].toInt() and 0xFF) shl 8) or
                         (header[3].toInt() and 0xFF)
-                    if (len < 0 || len > 32 * 1024 * 1024) { onDisconnected("bad frame len $len"); break }
+                    if (len < 0 || len > 32 * 1024 * 1024) { listener.onDisconnected("bad frame len $len"); break }
                     val buf = ByteArray(len)
                     readFully(rawIn, buf, 0, len)
-                    onFrame(first, buf)
+                    listener.onFrame(first, buf)
                 }
             }
         } catch (e: Exception) {
-            if (running.get()) onDisconnected(e.message)
+            if (running.get()) listener.onDisconnected(e.message)
         } finally {
             connected = false
             runCatching { sock?.close() }

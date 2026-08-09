@@ -16,9 +16,21 @@ android {
         vectorDrawables { useSupportLibrary = true }
     }
 
+signingConfigs {
+        create("release") {
+            val home = System.getenv("USERPROFILE") ?: System.getProperty("user.home")
+            val keystore = System.getenv("ANDROID_APP_KEYSTORE") ?: "$home/.android/debug.keystore"
+            storeFile = file(keystore)
+            storePassword = System.getenv("ANDROID_APP_STORE_PASSWORD") ?: "android"
+            keyAlias = System.getenv("ANDROID_APP_KEY_ALIAS") ?: "androiddebugkey"
+            keyPassword = System.getenv("ANDROID_APP_KEY_PASSWORD") ?: "android"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }

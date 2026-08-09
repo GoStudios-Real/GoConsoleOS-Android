@@ -89,7 +89,7 @@ class CastService : Service() {
     }
 
     private fun onFrameAvailable(reader: ImageReader) {
-        val image: Image? = reader.acquireLatestImage() ?: return
+        val image = reader.acquireLatestImage() ?: return
         try {
             val planes = image.planes
             if (planes.isEmpty()) return

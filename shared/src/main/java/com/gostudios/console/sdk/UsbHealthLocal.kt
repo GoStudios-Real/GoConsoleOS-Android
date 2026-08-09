@@ -1,10 +1,12 @@
 package com.gostudios.console.sdk
 
 import android.content.Context
+import android.hardware.usb.UsbConstants
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
+import android.os.Environment
+import android.os.StatFs
 import android.os.storage.StorageManager
-import android.os.storage.VolumeInfo
 import java.util.Locale
 
 /**
@@ -24,15 +26,16 @@ object UsbHealthLocal {
         if (sm != null) {
             for (v in sm.storageVolumes) {
                 val dir = v.directory ?: continue
-                val total = runCatching { sm.getTotalBytes(dir) }.getOrDefault(0L)
-                val free = runCatching { sm.getAvailableBytes(dir) }.getOrDefault(0L)
-                val mounted = v.state == VolumeInfo.STATE_MOUNTED
-                val label = v.description ?: runCatching { dir.name }.getOrDefault("Volume")
+                val st = runCatching { StatFs(dir.path) }.getOrNull()
+                val totalSpace = st?.totalBytes ?: 0L
+                val freeSpace = st?.availableBytes ?: 0L
+                val mounted = v.state == Environment.MEDIA_MOUNTED
+                val label = runCatching { v.getDescription(context) }.getOrDefault(dir.name)
                 var health = Protocol.USB_HEALTH_UNKNOWN
                 var score = 0
 
                 if (mounted) {
-                    val freeFraction = if (total > 0) free.toDouble() / total.toDouble() else 1.0
+                    val freeFraction = if (totalSpace > 0) freeSpace.toDouble() / totalSpace.toDouble() else 1.0
                     health = when {
                         freeFraction <= 0.02 -> Protocol.USB_HEALTH_POOR
                         freeFraction <= 0.10 -> Protocol.USB_HEALTH_FAIR
@@ -43,22 +46,22 @@ object UsbHealthLocal {
                         Protocol.USB_HEALTH_FAIR -> 60
                         else -> 20
                     }
-                } else if (v.state == VolumeInfo.STATE_MOUNTED_READ_ONLY) {
+                } else if (v.state == Environment.MEDIA_MOUNTED_READ_ONLY) {
                     health = Protocol.USB_HEALTH_FAIR
                     score = 55
                 }
 
                 out.add(
                     UsbDeviceInfo(
-                        id = v.id,
+                        id = dir.path,
                         label = label,
                         vendor = "",
                         product = label,
                         serial = "",
                         health = health,
                         healthScore = score,
-                        totalBytes = total,
-                        freeBytes = free,
+                        totalBytes = totalSpace,
+                        freeBytes = freeSpace,
                         interfaceType = if (v.isRemovable) "USB" else "Internal",
                         mounted = mounted,
                     )
@@ -78,7 +81,7 @@ object UsbHealthLocal {
                         serial = dev.serialNumber ?: "",
                         health = Protocol.USB_HEALTH_UNKNOWN,
                         healthScore = 0,
-                        interfaceType = if (dev.deviceClass == UsbDevice.CLASS_MASS_STORAGE) "USB Storage" else "USB Interface",
+                        interfaceType = if (dev.deviceClass == UsbConstants.USB_CLASS_MASS_STORAGE) "USB Storage" else "USB Interface",
                         mounted = false,
                     )
                 )
