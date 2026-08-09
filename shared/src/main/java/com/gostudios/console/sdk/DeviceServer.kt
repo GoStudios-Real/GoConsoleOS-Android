@@ -142,9 +142,21 @@ object DeviceServer {
         return when {
             path.startsWith("/api/acc/") -> handleAcc(method, path.removePrefix("/api/acc/"), body, query)
             path == "/api/goai" -> handleGoAi(body)
+            path == "/api/update" -> handleUpdate()
             path == "/api/info" -> handleInfo()
             else -> 404 to """{"ok":false,"error":"unknown"}"""
         }
+    }
+
+    private fun handleUpdate(): Pair<Int, String> {
+        val u = JSONObject()
+            .put("ok", true)
+            .put("current", "1.1.0")
+            .put("channel", "stable")
+            .put("checkUrl", "https://raw.githubusercontent.com/GoStudios-Real/GoConsoleOS/main/update.json")
+            .put("manifestVersion", 1)
+            .put("serverTime", System.currentTimeMillis())
+        return 200 to u.toString()
     }
 
     private fun handleInfo(): Pair<Int, String> {
