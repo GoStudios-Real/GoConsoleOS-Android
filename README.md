@@ -7,7 +7,7 @@ which bundles four companion services on one device:
 
 | Feature | What it does |
 |---|---|
-| 🖥️ **Portable USB** | Find your GoConsoleOS USB host on Wi-Fi, launch it, open the USB Installer |
+| 🖥️ **Portable USB** | Find your GoConsoleOS USB host on Wi-Fi and open the **Portable App** panel — a full launcher for host tools: GoUsbMaker, USB Health, Cast, GoAI, GoStore and Screenshot (`tools.list` / `tools.run`) |
 | 📡 **GoConsoleOS Link** | LAN transport to browse and launch the host's game library over the same Wi-Fi (Steam Link style) |
 | 🛡️ **USB Health** | Local on-device volume & health check plus the host's deep SMART report for portable USB drives (Android 13/16) |
 | 📺 **GoConsoleOS Cast** | Screen-cast the device to the host / TV via the same transport |
@@ -31,6 +31,10 @@ The SDK (`/shared`) depends only on the Android framework and `org.json`
 UDP :39100   discovery    GCS hello → hosts reply with a JSON beacon
 TCP :39101   streaming    control lines + length-prefixed binary frames (JPEG, USB, cast)
 ```
+
+Control messages include `hello`, `games.list`, `games.launch`, `usb.list`,
+`pair`, `cast.start`/`cast.stop`, and the Portable App panel's `tools.list`
+(fetch the remote tool catalogue) and `tools.run` (run a tool by id).
 
 See [docs/PROTOCOL.md](docs/PROTOCOL.md) for the wire format and
 [docs/HOST.md](docs/HOST.md) for the Windows host service.

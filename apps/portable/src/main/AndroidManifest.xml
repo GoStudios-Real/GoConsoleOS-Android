@@ -35,6 +35,7 @@
         </activity>
 
         <activity android:name=".LinkActivity" android:exported="false" android:screenOrientation="landscape" />
+        <activity android:name=".PortableActivity" android:exported="false" android:screenOrientation="landscape" />
         <activity android:name=".UsbHealthActivity" android:exported="false" />
         <activity android:name=".cast.MediaProjectionActivity" android:exported="false" />
 

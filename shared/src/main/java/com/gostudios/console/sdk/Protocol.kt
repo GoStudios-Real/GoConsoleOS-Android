@@ -36,6 +36,12 @@ object Protocol {
     const val MSG_CAST_START = "cast.start"
     const val MSG_CAST_STOP = "cast.stop"
 
+    /** List remote host tools (usb-installer, usb-health, cast, goai, ...). */
+    const val MSG_TOOLS_LIST = "tools.list"
+
+    /** Run a remote host tool by id. */
+    const val MSG_TOOLS_RUN = "tools.run"
+
     const val USB_HEALTH_OK = "ok"
     const val USB_HEALTH_FAIR = "fair"
     const val USB_HEALTH_POOR = "poor"

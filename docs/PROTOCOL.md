@@ -55,7 +55,19 @@ The stream mixes two kinds of records:
 {"type":"cast.start"}\n
 {"type":"cast.stop"}\n
 {"type":"pair","action":"open-usb-installer"}\n
+{"type":"tools.list"}\n
+{"type":"tools.run","tool":"goai"}\n
 ```
+
+`tools.list` replies with the Portable App tool catalogue the host supports:
+
+```json
+{"type":"tools.list","tools":[{"id":"usb-installer","name":"GoUsbMaker","desc":"..."},{"id":"goai","name":"GoAI","desc":"..."}]}
+```
+
+`tools.run` triggers that tool on the host (`usb-installer`, `usb-health`,
+`cast`, `goai`, `store`, `screenshot`) and replies
+`{"type":"tools.run","ok":true,"tool":"..."}`.
 
 ### 2. Binary frames
 

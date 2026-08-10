@@ -8,9 +8,6 @@ import com.gostudios.console.portable.cast.MediaProjectionActivity
 import com.gostudios.console.sdk.ConsoleHost
 import com.gostudios.console.sdk.DeviceServer
 import com.gostudios.console.sdk.Discovery
-import com.gostudios.console.sdk.LinkClient
-import com.gostudios.console.sdk.Protocol
-import org.json.JSONObject
 
 /**
  * Home screen of GoConsoleOS Portable. Discovers a GoConsoleOS host on the LAN
@@ -40,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             activeHost?.let { startActivity(MediaProjectionActivity.intent(this, it)) }
         }
         findViewById<LinearLayout>(R.id.btnBoot).setOnClickListener {
-            activeHost?.let { openUsbInstaller(it) }
+            activeHost?.let { startActivity(PortableActivity.intent(this, it)) }
         }
 
         scanner = Discovery.Scanner { host ->
@@ -56,21 +53,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         scanner?.start()
-    }
-
-    /** Ask the host to open its bundled GoConsoleOS USB Installer tool. */
-    private fun openUsbInstaller(host: ConsoleHost) {
-        var client: LinkClient? = null
-        client = LinkClient(host, object : LinkClient.Listener {
-            override fun onConnected(h: ConsoleHost) {
-                client?.sendControl(Protocol.MSG_PAIR, JSONObject().put("action", "open-usb-installer"))
-                client?.close()
-            }
-            override fun onControl(type: String, payload: JSONObject) {}
-            override fun onFrame(type: Int, payload: ByteArray) {}
-            override fun onDisconnected(error: String?) {}
-        })
-        client.connect()
     }
 
     override fun onDestroy() {

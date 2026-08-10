@@ -9,6 +9,10 @@
     <string name="btn_link">GoConsoleOS Link</string>
     <string name="btn_usbhealth">USB Health</string>
     <string name="btn_cast">Cast</string>
-    <string name="btn_boot">Open USB Installer</string>
+    <string name="btn_boot">Portable App</string>
+    <string name="tool_running">Starting %1$s…</string>
+    <string name="tool_ok">%1$s sent to the console.</string>
+    <string name="portable_title">GoConsoleOS Portable App</string>
+    <string name="portable_subtitle">Tools for your GoConsoleOS on USB</string>
     <string name="progress">%1$d%%</string>
 </resources>
