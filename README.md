@@ -1,5 +1,11 @@
 # GoConsoleOS Android
 
+<p align="center">
+  <img src="assets/banner.svg" alt="GoConsoleOS Android" width="100%" />
+  <br/>
+  <img src="assets/logo.svg" alt="GoConsoleOS Android logo" width="280" />
+</p>
+
 Companion apps for **GoConsoleOS** — the controller-first gaming console shell for Windows USB.
 
 This repository contains full Android Studio source for the **GoConsoleOS** companion apps:
@@ -69,4 +75,8 @@ library, streams health and accepts Casts through the same socket transport.
 
 ## License
 
-Proprietary GoStudios software · © 2026 GoStudios.
+Copyright © 2026 GoStudios. All rights reserved.
+
+Proprietary GoStudios software. Provided for educational and personal use; redistribution or commercial use requires permission.
+
+**GoConsoleOS™** and the **GoConsoleOS logo** are trademarks of GoStudios. Other product names and trademarks are the property of their respective owners.
