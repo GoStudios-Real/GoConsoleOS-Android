@@ -25,13 +25,15 @@ jobs:
         with:
           gradle-version: 8.9
 
-      - name: Build debug APK
-        run: gradle :apps:portable:assembleDebug --no-daemon --no-watch-fs
+      - name: Build debug APKs
+        run: |
+          gradle :apps:portable:assembleDebug :apps:touchscreen:assembleDebug --no-daemon --no-watch-fs
 
-      - name: Upload APK
+      - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
-          name: GoConsoleOS-Mobile-debug
+          name: GoConsoleOS-APKs
           path: |
             apps/portable/build/outputs/apk/debug/*.apk
+            apps/touchscreen/build/outputs/apk/debug/*.apk
           if-no-files-found: error
