@@ -80,17 +80,34 @@ The stream mixes two kinds of records:
 | 2 | USB health report array | JSON of `UsbDeviceInfo[]` |
 | 3 | Cast video frame | JPEG bytes |
 | 4 | Cast audio chunk | raw PCM |
-| 5 | input (from phone → host) | 4-byte button bitmask |
+| 5 | input (from phone → host) | 14-byte controller state (below) |
 
 ### Input frame (phone → host, type 5)
 
-4-byte big-endian bitmask matches the Windows `ControllerButtons` enum:
+14-byte big-endian payload:
+
+```
+bytes  0..3  button bitmask
+byte   4     left trigger  0..255
+byte   5     right trigger 0..255
+bytes  6..7  left stick X  int16 (-32768..32767)
+bytes  8..9  left stick Y  int16
+bytes 10..11 right stick X int16
+bytes 12..13 right stick Y int16
+```
+
+The 4-byte button bitmask matches the Windows `ControllerButtons` enum:
 
 ```
 Guide=1  Back=2  Start=4  A=8  B=16
 X=32  Y=64  LeftShoulder=128  RightShoulder=256
 DPadUp=512  DPadDown=1024  DPadLeft=2048  DPadRight=4096
+LeftTrigger=8192  RightTrigger=16384
 ```
+
+Stick Y is positive "down" (screen coords), so a stick pushed up reads
+negative Y. Hosts that only know the original 4-byte bitmask simply ignore
+the trailing 10 analog bytes.
 
 ## USB health report
 

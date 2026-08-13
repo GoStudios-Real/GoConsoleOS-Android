@@ -46,4 +46,25 @@ object Protocol {
     const val USB_HEALTH_FAIR = "fair"
     const val USB_HEALTH_POOR = "poor"
     const val USB_HEALTH_UNKNOWN = "unknown"
+
+    // ---- FRAME_INPUT (phone -> host, type 5) ----
+    // Payload: 4-byte big-endian button bitmask + 2 analog trigger bytes +
+    // 4 analog stick int16s (big-endian). See docs/PROTOCOL.md "Input frame".
+    const val INPUT_SIZE = 14
+
+    const val BTN_GUIDE = 1L
+    const val BTN_BACK = 2L
+    const val BTN_START = 4L
+    const val BTN_A = 8L
+    const val BTN_B = 16L
+    const val BTN_X = 32L
+    const val BTN_Y = 64L
+    const val BTN_LEFT_SHOULDER = 128L
+    const val BTN_RIGHT_SHOULDER = 256L
+    const val BTN_DPAD_UP = 512L
+    const val BTN_DPAD_DOWN = 1024L
+    const val BTN_DPAD_LEFT = 2048L
+    const val BTN_DPAD_RIGHT = 4096L
+    const val BTN_LEFT_TRIGGER = 8192L
+    const val BTN_RIGHT_TRIGGER = 16384L
 }

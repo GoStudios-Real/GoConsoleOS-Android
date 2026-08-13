@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.GoConsole" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#0A0F1E</item>
+        <item name="colorPrimary">#00C9DB</item>
+        <item name="colorPrimaryDark">#008A96</item>
+        <item name="colorAccent">#00C9DB</item>
+    </style>
+</resources>

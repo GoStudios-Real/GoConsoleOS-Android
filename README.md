@@ -2,8 +2,14 @@
 
 Companion apps for **GoConsoleOS** — the controller-first gaming console shell for Windows USB.
 
-This repository contains full Android Studio source for a single APK, **GoConsoleOS Mobile**,
-which bundles four companion services on one device:
+This repository contains full Android Studio source for the **GoConsoleOS** companion apps:
+
+| App | Module | What it does |
+|---|---|---|
+| 🎮 **USB Controller** | `apps/touchscreen` | Touch gamepad for GoConsoleOS: two analog sticks, D-pad, A/B/X/Y, shoulder/trigger pads and Start/Back, streamed to the host over the LAN as input frames |
+| 🖥️ **GoConsoleOS Mobile** | `apps/portable` | Bundles Portable USB, Link, USB Health and Cast on one device |
+
+The **GoConsoleOS Mobile** app features:
 
 | Feature | What it does |
 |---|---|
@@ -16,14 +22,17 @@ which bundles four companion services on one device:
 ## Project layout
 
 ```
-apps/portable/       # the single mobile app (GoConsoleOS-Portable.apk)
-shared/              # SDK: discovery, LAN transport, models (zero third-party deps)
+apps/portable/       # GoConsoleOS Mobile (Portable, Link, USB Health, Cast)
+apps/touchscreen/    # GoConsoleOS USB Controller — touch gamepad app
+shared/              # SDK: discovery, LAN transport, models, input packer (zero third-party deps)
 docs/                # PROTOCOL.md, HOST.md
-.github/workflows/   # CI that builds the APK on every push
+.github/workflows/   # CI that builds both APKs on every push
 ```
 
 The SDK (`/shared`) depends only on the Android framework and `org.json`
-(part of the OS), so it compiles with the stock Android toolchain.
+(part of the OS), so it compiles with the stock Android toolchain. It also
+contains `ControllerInput`, the `FRAME_INPUT` payload packer shared by the
+touch gamepad.
 
 ## Protocol summary
 
@@ -45,11 +54,12 @@ Open this folder in Android Studio and Run, or on any machine with the Android
 SDK + JDK 11:
 
 ```bash
-./gradlew :apps:portable:assembleDebug
+./gradlew :apps:portable:assembleDebug :apps:touchscreen:assembleDebug
 # -> apps/portable/build/outputs/apk/debug/...
+# -> apps/touchscreen/build/outputs/apk/debug/...
 ```
 
-CI builds the debug APK on every push to `main`.
+CI builds both debug APKs on every push to `main`.
 
 ## Windows host side
 

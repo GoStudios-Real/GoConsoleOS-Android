@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_bg">#0A0F1E</color>
+    <color name="go_cyan">#00C9DB</color>
+    <color name="go_cyan_dim">#0E4A54</color>
+    <color name="go_card">#1E2236</color>
+    <color name="go_text">#E8E8F5</color>
+    <color name="go_muted">#7A80A0</color>
+    <color name="btn_a">#2EA681</color>
+    <color name="btn_b">#E6514D</color>
+    <color name="btn_x">#4C9AFF</color>
+    <color name="btn_y">#E0AF68</color>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GoConsoleOS USB Controller</string>
+    <string name="status_scanning">Searching for GoConsoleOS on Wi-Fi…</string>
+    <string name="status_connecting">Connecting to %1$s…</string>
+    <string name="status_connected">Connected to %1$s · buttons live</string>
+    <string name="status_disconnected">Disconnected — press Reconnect</string>
+    <string name="btn_reconnect">Reconnect</string>
+    <string name="hint_l2">L2</string>
+    <string name="hint_r2">R2</string>
+    <string name="hint_l1">L1</string>
+    <string name="hint_r1">R1</string>
+    <string name="hint_start">START</string>
+    <string name="hint_back">BACK</string>
+</resources>
