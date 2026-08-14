@@ -14,7 +14,7 @@ This repository contains full Android Studio source for the **GoConsoleOS** comp
 |---|---|---|
 | 🎮 **USB Controller** | `apps/touchscreen` | Touch gamepad for GoConsoleOS: two analog sticks, D-pad, A/B/X/Y, shoulder/trigger pads and Start/Back, streamed to the host over the LAN as input frames |
 | 🖥️ **GoConsoleOS Mobile** | `apps/portable` | Bundles Portable USB, Link, USB Health and Cast on one device |
-| 📱 **Account Portal** | `apps/account-portal` | WebView client for the Account Center: sign-in, devices, map, wallet, Game Pass subscriptions & gift cards (`.NET MAUI`, builds with the .NET SDK, not Gradle) |
+| 📱 **Account Portal** | `apps/account` | Account Center client: finds a console on Wi-Fi, opens the sign-in, devices, map, wallet, Game Pass subscriptions & gift cards in a WebView |
 
 The **GoConsoleOS Mobile** app features:
 
@@ -31,7 +31,7 @@ The **GoConsoleOS Mobile** app features:
 ```
 apps/portable/       # GoConsoleOS Mobile (Portable, Link, USB Health, Cast)
 apps/touchscreen/    # GoConsoleOS USB Controller — touch gamepad app
-apps/account-portal/ # GoConsoleOS Account Portal — .NET MAUI WebView client
+apps/account/        # GoConsoleOS Account Portal — WebView client
 shared/              # SDK: discovery, LAN transport, models, input packer (zero third-party deps)
 docs/                # PROTOCOL.md, HOST.md
 .github/workflows/   # CI that builds both APKs on every push

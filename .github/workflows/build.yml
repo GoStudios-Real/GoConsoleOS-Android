@@ -27,7 +27,7 @@ jobs:
 
       - name: Build debug APKs
         run: |
-          gradle :apps:portable:assembleDebug :apps:touchscreen:assembleDebug --no-daemon --no-watch-fs
+          gradle :apps:portable:assembleDebug :apps:touchscreen:assembleDebug :apps:account:assembleDebug --no-daemon --no-watch-fs
 
       - name: Upload APKs
         uses: actions/upload-artifact@v4
@@ -36,4 +36,5 @@ jobs:
           path: |
             apps/portable/build/outputs/apk/debug/*.apk
             apps/touchscreen/build/outputs/apk/debug/*.apk
+            apps/account/build/outputs/apk/debug/*.apk
           if-no-files-found: error

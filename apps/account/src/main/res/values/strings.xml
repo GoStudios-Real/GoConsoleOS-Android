@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GoConsoleOS Account</string>
+    <string name="title">GoConsoleOS Account Center</string>
+    <string name="subtitle">Sign in, manage devices, wallet and Game Pass on your console.</string>
+    <string name="scanning">Searching for GoConsoleOS consoles on Wi-Fi…</string>
+    <string name="no_hosts">No consoles found. Make sure GoConsoleOS is running, or enter an IP below.</string>
+    <string name="connect">CONNECT</string>
+    <string name="ip_hint">Console IP (192.168.1.50)</string>
+    <string name="port_hint">Port</string>
+    <string name="connect_fail">Could not reach %1$s</string>
+    <string name="back">Back</string>
+    <string name="reload">Reload</string>
+    <string name="connected">Connected to %1$s</string>
+</resources>
