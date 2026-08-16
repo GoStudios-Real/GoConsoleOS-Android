@@ -8,6 +8,22 @@ games, cities and GoStudios Cloud accounts) runs unmodified inside a WebView.
 The web code uses only public HTTPS APIs and `localStorage`, so no Electron
 APIs are needed on device.
 
+## Features
+
+- **Smarter AI models** - GoAI 6.4 (Neuron), 7.2 (Cortex), 8.9 (Genius),
+  9.3 (Quantum) and 1.7.9 (Omega) with increasing intelligence and token cost.
+- **Code GoAI** - dedicated code-writing mode with a language picker and
+  built-in previews.
+- **Plugins** - toggleable extra skills (Joke Machine, Fact Bot, Quote Genie,
+  Coin Flipper) that answer on demand.
+- **GoConsoleOS on-screen keyboard** - a built-in virtual keyboard for easy
+  typing on touch screens.
+- **Sidebar menu** - slide-out navigation on phones; fixed sidebar on tablets
+  and desktops.
+- **Extra skills** - dice rolls, strong passwords, word definitions, random
+  facts, quotes and more.
+- Smooth auto-scrolling chat that follows new messages.
+
 ## Support
 
 - Android 12 – 16 (`minSdk 31`, `targetSdk 36`).

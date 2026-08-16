@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Gaming GoAI - the AI for GoConsoleOS</title>
+<title>GoAI - the AI for GoConsoleOS</title>
 <link rel="stylesheet" href="assets/styles.css" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237c3aed'/%3E%3Cstop offset='1' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='44' fill='url(%23g)'/%3E%3Ctext x='50' y='66' font-size='52' font-family='Arial' font-weight='bold' text-anchor='middle' fill='white'%3EG%3C/text%3E%3C/svg%3E" />
 </head>
@@ -12,6 +12,7 @@
   <div class="app">
 
     <aside class="sidebar">
+      <button class="icon-btn side-close" id="sideClose" title="Close menu">&#10005;</button>
       <div class="brand">
         <div class="logo">
           <div class="orb"></div>
@@ -93,10 +94,11 @@
 
     <main class="main">
       <header class="topbar">
+        <button class="icon-btn menu-btn" id="menuBtn" title="Menu">&#9776;</button>
         <div class="tb-title">
           <span class="tb-logo G"></span>
           <div>
-            <div class="tb-name">Gaming GoAI</div>
+            <div class="tb-name">GoAI</div>
             <div class="tb-desc">the AI for GoConsoleOS &middot; by GoStudios</div>
           </div>
         </div>
@@ -105,6 +107,9 @@
           <span class="chip" id="chipModel"></span>
           <span class="chip" id="chipPing"><span class="dot dot-g"></span> brain: 100%</span>
           <span class="chip tok" id="chipTokens" title="GoAI token balance">&#9889; 999,999,999,999 tokens</span>
+          <button class="icon-btn" id="codeBtn" title="Code GoAI - write code">&#128187;</button>
+          <button class="icon-btn" id="pluginBtn" title="Plugins">&#129523;</button>
+          <button class="icon-btn" id="kbdBtn" title="On-screen keyboard">&#9000;&#65039;</button>
           <button class="icon-btn" id="chatsBtn" title="Your saved chats">&#128172;</button>
           <button class="icon-btn" id="newChat" title="Start a new chat">&#10133;</button>
         </div>
@@ -152,10 +157,50 @@
         </div>
       </div>
     </div>
+
+    <div id="codeModal" class="modal hidden">
+      <div class="modal-card">
+        <div class="modal-head">Code GoAI <button id="codeClose" class="mini-btn danger">Close</button></div>
+        <div class="modal-body">
+          <p class="modal-hint">Describe what code you want, then pick a language.</p>
+          <input id="codePrompt" placeholder="e.g. a calculator, a to-do list..." />
+          <label for="codeLang" class="lbl">Language</label>
+          <select id="codeLang">
+            <option value="javascript">JavaScript</option>
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="python">Python</option>
+            <option value="java">Java</option>
+            <option value="kotlin">Kotlin</option>
+            <option value="c++">C++</option>
+            <option value="csharp">C#</option>
+            <option value="go">Go</option>
+            <option value="sql">SQL</option>
+            <option value="bash">Bash</option>
+            <option value="json">JSON</option>
+          </select>
+          <button id="codeSubmit" class="send full">Write Code</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="pluginModal" class="modal hidden">
+      <div class="modal-card">
+        <div class="modal-head">GoAI Plugins <button id="pluginClose" class="mini-btn danger">Close</button></div>
+        <div class="modal-body">
+          <p class="modal-hint">Turn extra skills on or off. Plugins run right in GoAI.</p>
+          <div id="pluginList" class="plugin-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="osk" class="osk hidden"></div>
+    <div id="scrim" class="scrim hidden" data-close></div>
   </div>
 
   <script src="assets/sound.js"></script>
   <script src="assets/data.js"></script>
+  <script src="assets/plugins.js"></script>
   <script src="assets/core.js"></script>
   <script src="assets/brain.js"></script>
   <script src="assets/cloud.js"></script>

@@ -678,7 +678,7 @@
   on(t => /^what can you do|help|skills|commands|\/helps|options/.test(t),
     () => {
       A.suggestions(['What is the time?', 'Weather in London', 'Research black holes', 'Generate an image of a dragon', 'Write me a calculator', 'Tell me a joke', 'Play tic tac toe', 'Guess the number']);
-      return 'Here is what **Gaming GoAI** can do:\n\n**Core** - chat, math, conversions, definitions, memory\n**Live** - clock, date, weather, sunrise & sunset, timers, location\n**Web** - research anything on the internet\n**Create** - images, code, stories, poems, jokes, passwords, recipes\n**Plan** - study/workout/meal plans, brainstorming, ideas\n**Games** - tic-tac-toe, rock paper scissors, guess the number, trivia, coin flip, dice\n**Systems** - voice, GoConsoleOS sounds, Arcade Mode, Super Mind Mode, tokens, send\n\nYou hold **999,999,999,999 tokens** - higher models spend more. Say "play tic tac toe" to game!';
+      return 'Here is what **GoAI** can do:\n\n**Core** - chat, math, conversions, definitions, memory\n**Live** - clock, date, weather, sunrise & sunset, timers, location\n**Web** - research anything on the internet\n**Create** - images, code, stories, poems, jokes, passwords, recipes\n**Plan** - study/workout/meal plans, brainstorming, ideas\n**Games** - tic-tac-toe, rock paper scissors, guess the number, trivia, coin flip, dice\n**Plugins** - extra skills you can turn on (jokes, facts and more)\n**Systems** - voice, GoConsoleOS sounds, on-screen keyboard, Arcade Mode, Super Mind Mode, tokens, send\n\nYou hold **999,999,999,999 tokens** - higher models spend more. Say "play tic tac toe" to game!';
     });
 
   /* ---------- games ---------- */
@@ -825,6 +825,50 @@
       return 'Game over. Back to normal chat - what do you need?';
     });
 
+  /* ---------- new extra skills ---------- */
+
+  on(t => /\broll (?:a |the )?dice|roll a (d\d+|\d+)/.test(t),
+    t => {
+      const m = t.match(/d(\d+)/);
+      const sides = m ? parseInt(m[1], 10) : 6;
+      const n = Math.floor(Math.random() * sides) + 1;
+      sound('coin');
+      return '**Dice roll** - you rolled a **' + sides + '-sided** die: **' + n + '**!';
+    });
+
+  on(t => /\b(make|generate|give me) a password\b|strong password/.test(t),
+    t => {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%&*';
+      let pw = '';
+      for (let i = 0; i < 16; i++) pw += chars[Math.floor(Math.random() * chars.length)];
+      sound('select');
+      return '**Strong password** (16 chars): `' + pw + '`\n\nKeep it safe - I will not remember it for you.';
+    });
+
+  on(t => /^define ([a-z][a-z-]+)/.test(t),
+    t => {
+      const w = t.match(/^define ([a-z][a-z-]+)/)[1];
+      const words = window.GO_DATA.WORDS || [];
+      const hit = words.find(x => x[0] === w);
+      if (hit) return '**' + hit[0] + '** - ' + hit[1];
+      return 'I do not have a definition for **' + w + '** yet.';
+    });
+
+  on(t => /\b(?:random fact|interesting fact|did you know|tell me a fact)\b/.test(t),
+    t => {
+      const F = window.GO_DATA.FACTS || [];
+      sound('level');
+      return '**Did you know?** ' + (F[Math.floor(Math.random() * F.length)] || 'Facts are on their way.');
+    });
+
+  on(t => /\b(?:a quote|inspire me|motivate me|quote for me)\b/.test(t),
+    t => {
+      const Q = window.GO_DATA.QUOTES || [];
+      sound('success');
+      return '**Inspiration:** "' + (Q[Math.floor(Math.random() * Q.length)] || 'Keep going.') + '"';
+    });
+
+
   /* last-resort handler */
   on(() => true, t => {
     const topic = t.split(/\s+/).slice(0, 6).join(' ');
@@ -843,6 +887,16 @@
 
   async function run(text) {
     const norm = String(text).toLowerCase();
+    // Let enabled plugins answer first.
+    if (window.GoPlugins) {
+      const plug = window.GoPlugins.find(norm);
+      if (plug && plug.run) {
+        try {
+          const out = await plug.run(norm);
+          if (out) { sound('message'); return out; }
+        } catch (e) { console.error('PLUGIN ERR:', e); }
+      }
+    }
     for (const h of K) {
       const yes = h.test(norm);
       if (yes) {

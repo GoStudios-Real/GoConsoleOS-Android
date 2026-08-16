@@ -417,8 +417,63 @@ body.arcade .qa:hover{border-color:#00e5ff;box-shadow:0 0 14px rgba(0,229,255,.3
 body.arcade .sugg{border-radius:4px;font-family:'Courier New',monospace}
 body.arcade .model-select,body.arcade .modal-card{border-radius:6px}
 
+/* menu / sidebar (mobile) */
+.menu-btn{display:none}
+.side-close{display:none;align-self:flex-end}
+.scrim{
+  position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);
+}
+.scrim.hidden{display:none}
+body.side-open{overflow:hidden}
+
+/* on-screen keyboard (GoConsoleOS) */
+.osk{
+  position:fixed;left:0;right:0;bottom:0;z-index:65;
+  background:rgba(10,6,24,.97);border-top:1px solid var(--accent);
+  padding:8px 6px calc(6px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:6px;
+  transform:translateY(110%);transition:transform .22s ease;
+}
+.osk.hidden{display:none}
+body.osk-open .osk{transform:translateY(0)}
+.osk-row{display:flex;gap:5px;justify-content:center}
+.osk-key{
+  flex:1;max-width:44px;height:46px;border:1px solid var(--line);
+  background:var(--panel2);color:var(--txt);border-radius:9px;font-size:17px;
+  cursor:pointer;display:grid;place-items:center;transition:.1s;
+}
+.osk-key:active{background:var(--accent);color:#fff}
+.osk-key.wide{max-width:78px;font-size:15px}
+body.osk-open .composer{margin-bottom:0}
+body.osk-open .chat-wrap{padding-bottom:16px}
+
+/* code modal extras */
+.modal-hint{font-size:12.5px;color:var(--muted);margin:0}
+.modal-body .lbl{font-size:11.5px;color:var(--muted);margin-top:4px}
+.modal-body select{
+  background:#0d0722;border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;color:var(--txt);font-size:14px;outline:none;
+}
+.modal-body select:focus{border-color:var(--accent2)}
+
+/* plugin list */
+.plugin-list{display:flex;flex-direction:column;gap:9px}
+.plugin-row{
+  display:flex;align-items:center;gap:10px;border:1px solid var(--line);
+  border-radius:12px;padding:10px 12px;background:rgba(20,11,46,.6);
+}
+.plugin-info{flex:1;min-width:0}
+.plugin-name{font-size:13.5px;font-weight:700}
+.plugin-desc{font-size:11.5px;color:var(--muted)}
+
 @media (max-width:760px){
-  .sidebar{display:none}
+  .menu-btn{display:grid}
+  .sidebar{
+    position:fixed;top:0;left:0;bottom:0;z-index:70;
+    transform:translateX(-100%);transition:transform .24s ease;
+    display:flex;box-shadow:12px 0 40px rgba(0,0,0,.5);
+  }
+  body.side-open .sidebar{transform:translateX(0)}
+  .side-close{display:grid}
   .topbar{padding:11px 14px;flex-wrap:wrap;gap:9px}
   .tb-desc{display:none}
   .chip.tok{display:none}

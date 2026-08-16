@@ -46,11 +46,11 @@
 
   /* ---------- AI models ---------- */
   const MODELS = [
-    { id: 'g1', name: 'GoAI 1.5', tag: 'Starter', cost: 1, tier: 1, color: '#22c55e', desc: 'Fast and simple answers' },
-    { id: 'g2', name: 'GoAI 2.3', tag: 'Smart', cost: 2, tier: 2, color: '#06b6d4', desc: 'Quick smart answers' },
-    { id: 'g3', name: 'GoAI 3.1', tag: 'Pro', cost: 3, tier: 3, color: '#7c3aed', desc: 'Balanced intelligence' },
-    { id: 'g4', name: 'GoAI 4.7', tag: 'Genius', cost: 5, tier: 4, color: '#ec4899', desc: 'Deep reasoning' },
-    { id: 'g5', name: 'GoAI 5.9', tag: 'Super-Intellect', cost: 10, tier: 5, color: '#f59e0b', desc: 'The smartest GoAI ever' }
+    { id: 'g6', name: 'GoAI 6.4', tag: 'Neuron', cost: 12, tier: 6, color: '#22c55e', desc: 'Fast, sharp everyday answers' },
+    { id: 'g7', name: 'GoAI 7.2', tag: 'Cortex', cost: 25, tier: 7, color: '#06b6d4', desc: 'Deeper reasoning and insight' },
+    { id: 'g8', name: 'GoAI 8.9', tag: 'Genius', cost: 40, tier: 8, color: '#7c3aed', desc: 'Advanced logic and creativity' },
+    { id: 'g9', name: 'GoAI 9.3', tag: 'Quantum', cost: 60, tier: 9, color: '#ec4899', desc: 'Near-flawless problem solving' },
+    { id: 'g10', name: 'GoAI 1.7.9', tag: 'Omega', cost: 100, tier: 10, color: '#f59e0b', desc: 'The smartest GoAI ever built' }
   ];
   A.models = MODELS;
   A.model = MODELS.find(m => m.id === localStorage.getItem('goai_model')) || MODELS[2];
@@ -452,7 +452,7 @@
     A.history = [];
     A.chatEl.innerHTML = '';
     beep('confirm');
-    A.msg('ai', 'Welcome to **Gaming GoAI** - the AI for **GoConsoleOS**, built by **GoStudios**.\n\nYour model is **' + A.model.name + '** (' + A.model.tag + ', ' + A.model.cost + ' token per message). I can tell the **time** and **weather**, set **timers**, **research the web**, generate **images** and **code**, convert **currency**, write **plans** and **recipes**, manage your **cities** - and **play games** like tic-tac-toe, rock paper scissors, guess the number and trivia!', true);
+    A.msg('ai', 'Welcome to **GoAI** - the AI for **GoConsoleOS**, built by **GoStudios**.\n\nYour model is **' + A.model.name + '** (' + A.model.tag + ', ' + A.model.cost + ' token per message). I can tell the **time** and **weather**, set **timers**, **research the web**, generate **images** and **code**, convert **currency**, write **plans** and **recipes**, manage your **cities** - and **play games** like tic-tac-toe, rock paper scissors, guess the number and trivia!', true);
     A.suggestions(['What is the time?', 'Weather in London', 'Play tic tac toe', 'Guess the number', 'Generate an image of a dragon', 'Write me a calculator', 'Add city Paris', 'Trivia']);
   }
 
@@ -519,6 +519,133 @@
     });
   };
   renderAccount();
+
+  /* ---------- mobile sidebar toggle ---------- */
+  const sidebar = document.querySelector('.sidebar');
+  const menuBtn = document.getElementById('menuBtn');
+  const sideClose = document.getElementById('sideClose');
+  const scrim = document.getElementById('scrim');
+  function openSide() { document.body.classList.add('side-open'); scrim.classList.remove('hidden'); }
+  function closeSide() { document.body.classList.remove('side-open'); scrim.classList.add('hidden'); }
+  menuBtn.onclick = openSide;
+  sideClose.onclick = closeSide;
+  scrim.onclick = closeSide;
+
+  /* ---------- on-screen keyboard (GoConsoleOS) ---------- */
+  const kbdBtn = document.getElementById('kbdBtn');
+  const oskEl = document.getElementById('osk');
+  let oskOn = false;
+  const KEY_ROWS = [
+    ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+    ['SHIFT', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'BS'],
+    ['123', 'SPACE', 'ENTER']
+  ];
+  const SHIFT_KEYS = { q: 'Q', w: 'W', e: 'E', r: 'R', t: 'T', y: 'Y', u: 'U', i: 'I', o: 'O', p: 'P', a: 'A', s: 'S', d: 'D', f: 'F', g: 'G', h: 'H', j: 'J', k: 'K', l: 'L', z: 'Z', x: 'X', c: 'C', v: 'V', b: 'B', n: 'N', m: 'M' };
+  let oskShift = false;
+  function buildOsk() {
+    oskEl.innerHTML = '';
+    KEY_ROWS.forEach(row => {
+      const r = document.createElement('div');
+      r.className = 'osk-row';
+      row.forEach(k => {
+        const b = document.createElement('button');
+        b.className = 'osk-key' + (k.length > 1 ? ' wide' : '');
+        b.textContent = k === 'SPACE' ? ' ' : (k === 'BS' ? '\u232b' : (k === 'ENTER' ? '\u23ce' : (k === 'SHIFT' ? '\u21e7' : (k === '123' ? '?123' : (oskShift && SHIFT_KEYS[k] ? SHIFT_KEYS[k] : k)))));
+        b.onclick = function () { oskPress(k); };
+        r.appendChild(b);
+      });
+      oskEl.appendChild(r);
+    });
+  }
+  function oskPress(k) {
+    input.focus();
+    const start = input.selectionStart || input.value.length;
+    const end = input.selectionEnd || input.value.length;
+    if (k === 'SPACE') {
+      input.value = input.value.slice(0, start) + ' ' + input.value.slice(end);
+    } else if (k === 'BS') {
+      input.value = input.value.slice(0, start > 0 ? start - 1 : 0) + input.value.slice(end);
+    } else if (k === 'ENTER') {
+      GoAsk.send();
+    } else if (k === 'SHIFT') {
+      oskShift = !oskShift; buildOsk(); return;
+    } else if (k === '123') {
+      A.toast('Numbers and symbols are on the system keyboard.');
+    } else {
+      const ch = (oskShift && SHIFT_KEYS[k]) ? SHIFT_KEYS[k] : k;
+      input.value = input.value.slice(0, start) + ch + input.value.slice(end);
+    }
+    const npos = k === 'BS' ? Math.max(0, start - 1) : start + (k.length === 1 ? 1 : 0);
+    input.setSelectionRange(npos, npos);
+    input.dispatchEvent(new Event('input'));
+    autoGrow();
+    beep('select');
+    if (oskShift) { oskShift = false; buildOsk(); }
+  }
+  kbdBtn.onclick = function () {
+    oskOn = !oskOn;
+    document.body.classList.toggle('osk-open', oskOn);
+    if (oskOn) buildOsk();
+    beep('confirm');
+  };
+  try { if (localStorage.getItem('goai_osk') === '1') { oskOn = true; document.body.classList.add('osk-open'); } } catch (e) {}
+  window.addEventListener('beforeunload', function () {
+    try { localStorage.setItem('goai_osk', oskOn ? '1' : '0'); } catch (e) {}
+  });
+
+  /* ---------- Code GoAI ---------- */
+  const codeModal = document.getElementById('codeModal');
+  const codePrompt = document.getElementById('codePrompt');
+  const codeLang = document.getElementById('codeLang');
+  document.getElementById('codeBtn').onclick = function () {
+    codeModal.classList.remove('hidden');
+    codePrompt.focus();
+  };
+  document.getElementById('codeClose').onclick = function () { codeModal.classList.add('hidden'); };
+  document.getElementById('codeSubmit').onclick = function () {
+    const p = codePrompt.value.trim();
+    if (!p) { A.toast('Describe what code you want first.'); return; }
+    const lang = codeLang.value;
+    codeModal.classList.add('hidden');
+    input.value = 'Write me ' + p + ' in ' + lang;
+    GoAsk.send();
+    beep('confirm');
+  };
+
+  /* ---------- Plugins ---------- */
+  const pluginModal = document.getElementById('pluginModal');
+  const pluginListEl = document.getElementById('pluginList');
+  document.getElementById('pluginBtn').onclick = function () { renderPlugins(); pluginModal.classList.remove('hidden'); };
+  document.getElementById('pluginClose').onclick = function () { pluginModal.classList.add('hidden'); };
+  function renderPlugins() {
+    pluginListEl.innerHTML = '';
+    window.GoPlugins.list().forEach(function (p) {
+      const row = document.createElement('div');
+      row.className = 'plugin-row';
+      const info = document.createElement('div');
+      info.className = 'plugin-info';
+      info.innerHTML = '<div class="plugin-name"><span>' + p.icon + '</span> ' + p.name + '</div><div class="plugin-desc">' + p.desc + '</div>';
+      const sw = document.createElement('label');
+      sw.className = 'switch';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = p.enabled;
+      cb.onchange = function () {
+        const on = window.GoPlugins.toggle(p.id);
+        cb.checked = on;
+        beep(on ? 'confirm' : 'clear');
+        A.toast((on ? 'Enabled ' : 'Disabled ') + p.name);
+      };
+      const sl = document.createElement('span');
+      sl.className = 'slider';
+      sw.appendChild(cb);
+      sw.appendChild(sl);
+      row.appendChild(info);
+      row.appendChild(sw);
+      pluginListEl.appendChild(row);
+    });
+  }
 
   /* ---------- boot ---------- */
   A.typingOff();

@@ -21,7 +21,7 @@ if (!gotLock) {
       height: 820,
       minWidth: 960,
       minHeight: 620,
-      title: 'Gaming GoAI - the AI for GoConsoleOS',
+      title: 'GoAI - the AI for GoConsoleOS',
       backgroundColor: '#07020f',
       autoHideMenuBar: true,
       webPreferences: {

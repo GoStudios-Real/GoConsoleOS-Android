@@ -22,7 +22,11 @@
 
   A.scroll = () => {
     const w = A.chatEl.parentElement;
-    w.scrollTop = w.scrollHeight;
+    try {
+      w.scrollTo({ top: w.scrollHeight, behavior: 'smooth' });
+    } catch (e) {
+      w.scrollTop = w.scrollHeight;
+    }
   };
 
   A.typingOn = () => A.typingEl.classList.remove('hidden');
