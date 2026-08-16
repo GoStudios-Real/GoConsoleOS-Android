@@ -15,6 +15,7 @@ This repository contains full Android Studio source for the **GoConsoleOS** comp
 | 🎮 **USB Controller** | `apps/touchscreen` | Touch gamepad for GoConsoleOS: two analog sticks, D-pad, A/B/X/Y, shoulder/trigger pads and Start/Back, streamed to the host over the LAN as input frames |
 | 🖥️ **GoConsoleOS Mobile** | `apps/portable` | Bundles Portable USB, Link, USB Health and Cast on one device |
 | 📱 **Account Portal** | `apps/account` | Account Center client: finds a console on Wi-Fi, opens the sign-in, devices, map, wallet, Game Pass subscriptions & gift cards in a WebView |
+| 🤖 **GoAI** | `apps/goai` | The GoAI AI assistant (Android 12–16): chat, weather, images, code, research, games, cities & GoStudios Cloud accounts in a hardened WebView |
 
 The **GoConsoleOS Mobile** app features:
 

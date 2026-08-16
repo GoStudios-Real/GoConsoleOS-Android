@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.GoAI" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#07020f</item>
+        <item name="android:colorAccent">#06b6d4</item>
+        <item name="colorPrimary">#7c3aed</item>
+        <item name="colorPrimaryDark">#07020f</item>
+        <item name="android:navigationBarColor">#07020f</item>
+        <item name="android:statusBarColor">#07020f</item>
+        <item name="android:windowFullscreen">false</item>
+    </style>
+</resources>
