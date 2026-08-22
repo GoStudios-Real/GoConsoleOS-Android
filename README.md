@@ -16,6 +16,7 @@ This repository contains full Android Studio source for the **GoConsoleOS** comp
 | 🖥️ **GoConsoleOS Mobile** | `apps/portable` | Bundles Portable USB, Link, USB Health and Cast on one device |
 | 📱 **Account Portal** | `apps/account` | Account Center client: finds a console on Wi-Fi, opens the sign-in, devices, map, wallet, Game Pass subscriptions & gift cards in a WebView |
 | 🤖 **GoAI** | `apps/goai` | The GoAI AI assistant (Android 12–16): chat, weather, images, code, research, games, cities & GoStudios Cloud accounts in a hardened WebView |
+| ⌚ **Watch Companion** | `apps/watch` | Wear OS companion: discovers your console on Wi-Fi, shows connection status, Game Pass tier, game count — glanceable from your wrist |
 
 The **GoConsoleOS Mobile** app features:
 
@@ -33,9 +34,11 @@ The **GoConsoleOS Mobile** app features:
 apps/portable/       # GoConsoleOS Mobile (Portable, Link, USB Health, Cast)
 apps/touchscreen/    # GoConsoleOS USB Controller — touch gamepad app
 apps/account/        # GoConsoleOS Account Portal — WebView client
+apps/goai/           # GoAI assistant — chat + info in a WebView
+apps/watch/          # Watch Companion — Wear OS status + discovery
 shared/              # SDK: discovery, LAN transport, models, input packer (zero third-party deps)
 docs/                # PROTOCOL.md, HOST.md
-.github/workflows/   # CI that builds both APKs on every push
+.github/workflows/   # CI that builds all APKs on every push
 ```
 
 The SDK (`/shared`) depends only on the Android framework and `org.json`
