@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="go_dark">#0D1B2A</color>
+    <color name="go_primary">#00C9DB</color>
+    <color name="go_surface">#1B2838</color>
+</resources>
