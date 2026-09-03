@@ -71,9 +71,9 @@ class GamePadView @JvmOverloads constructor(
     private val pStroke = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = 0xFF2A3050.toInt(); style = Paint.Style.STROKE; strokeWidth = 3f
     }
-    private val pActive = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFF00C9DB.toInt() }
+    private val pActive = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFF0066FF.toInt() }
     private val pActiveDim = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0x6600C9DB.toInt() }
-    private val pKnob = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFF00C9DB.toInt() }
+    private val pKnob = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFF0066FF.toInt() }
     private val pKnobDim = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFF0E4A54.toInt() }
     private val pTextSmall = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = 0xFF7A80A0.toInt(); textAlign = Paint.Align.CENTER; textSize = 18f

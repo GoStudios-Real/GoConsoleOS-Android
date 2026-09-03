@@ -3,7 +3,7 @@
     <item android:drawable="@color/ic_bg" />
     <item>
         <shape android:shape="oval">
-            <solid android:color="#00C9DB" />
+            <solid android:color="#0066FF" />
             <size android:width="48dp" android:height="48dp" />
         </shape>
     </item>
