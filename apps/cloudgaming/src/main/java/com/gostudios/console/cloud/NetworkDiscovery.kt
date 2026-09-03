@@ -17,10 +17,26 @@ data class GameInfo(
     val launchUrl: String = "",
 )
 
+data class CloudServer(
+    val address: String,
+    val port: Int,
+    val name: String = "Cloud",
+    val version: String = "2.2.0",
+)
+
+enum class ConnectionMode {
+    LOCAL,
+    CLOUD,
+}
+
 class ConsoleConnection {
     var host: ConsoleHost? = null
         private set
     var isConnected: Boolean = false
+        private set
+    var connectionMode: ConnectionMode = ConnectionMode.LOCAL
+        private set
+    var cloudServer: CloudServer? = null
         private set
 
     private val client = OkHttpClient.Builder()
@@ -29,6 +45,8 @@ class ConsoleConnection {
         .build()
 
     private var scanner: Discovery.Scanner? = null
+
+    private val CLOUD_SERVER_URL = "https://gostudios.net/api"
 
     fun startDiscovery(onHostFound: (ConsoleHost) -> Unit) {
         stopDiscovery()
@@ -46,17 +64,64 @@ class ConsoleConnection {
     fun connect(host: ConsoleHost) {
         this.host = host
         this.isConnected = true
+        this.connectionMode = ConnectionMode.LOCAL
+        this.cloudServer = null
+    }
+
+    suspend fun connectToCloud(): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val request = Request.Builder()
+                .url("$CLOUD_SERVER_URL/console")
+                .get()
+                .build()
+            val response = client.newCall(request).execute()
+            val body = response.body?.string() ?: return@withContext false
+            val json = JSONObject(body)
+            val success = json.optBoolean("success", false)
+            if (success) {
+                this@ConsoleConnection.cloudServer = CloudServer(
+                    address = CLOUD_SERVER_URL,
+                    port = 443,
+                    name = json.optString("name", "GoConsoleOS Cloud"),
+                    version = json.optString("version", "2.2.0"),
+                )
+                this@ConsoleConnection.isConnected = true
+                this@ConsoleConnection.connectionMode = ConnectionMode.CLOUD
+                true
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            false
+        }
     }
 
     fun disconnect() {
         host = null
+        cloudServer = null
         isConnected = false
+        connectionMode = ConnectionMode.LOCAL
+    }
+
+    fun getDashboardUrl(): String {
+        return when (connectionMode) {
+            ConnectionMode.LOCAL -> {
+                val currentHost = host ?: return ""
+                "http://${currentHost.address}:${currentHost.port}"
+            }
+            ConnectionMode.CLOUD -> CLOUD_SERVER_URL
+        }
     }
 
     suspend fun fetchGames(): List<GameInfo> = withContext(Dispatchers.IO) {
-        val currentHost = host ?: return@withContext emptyList()
         try {
-            val url = "http://${currentHost.address}:${currentHost.port}/api/games"
+            val url = when (connectionMode) {
+                ConnectionMode.LOCAL -> {
+                    val currentHost = host ?: return@withContext emptyList()
+                    "http://${currentHost.address}:${currentHost.port}/api/games"
+                }
+                ConnectionMode.CLOUD -> "$CLOUD_SERVER_URL/games"
+            }
             val request = Request.Builder().url(url).get().build()
             val response = client.newCall(request).execute()
             val body = response.body?.string() ?: return@withContext emptyList()
@@ -88,9 +153,14 @@ class ConsoleConnection {
     }
 
     suspend fun launchGame(title: String): Boolean = withContext(Dispatchers.IO) {
-        val currentHost = host ?: return@withContext false
         try {
-            val url = "http://${currentHost.address}:${currentHost.port}/api/games/launch"
+            val url = when (connectionMode) {
+                ConnectionMode.LOCAL -> {
+                    val currentHost = host ?: return@withContext false
+                    "http://${currentHost.address}:${currentHost.port}/api/games/launch"
+                }
+                ConnectionMode.CLOUD -> "$CLOUD_SERVER_URL/games/launch"
+            }
             val json = JSONObject().put("title", title)
             val body = json.toString().toRequestBody(
                 "application/json; charset=utf-8".toMediaTypeOrNull()
@@ -104,7 +174,12 @@ class ConsoleConnection {
     }
 
     fun getStreamUrl(path: String = ""): String {
-        val currentHost = host ?: return ""
-        return "http://${currentHost.address}:${currentHost.port}$path"
+        return when (connectionMode) {
+            ConnectionMode.LOCAL -> {
+                val currentHost = host ?: return ""
+                "http://${currentHost.address}:${currentHost.port}$path"
+            }
+            ConnectionMode.CLOUD -> "$CLOUD_SERVER_URL$path"
+        }
     }
 }

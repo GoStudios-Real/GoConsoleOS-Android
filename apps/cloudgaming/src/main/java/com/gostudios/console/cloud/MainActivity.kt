@@ -31,6 +31,7 @@ enum class Screen {
     DISCOVERY,
     LIBRARY,
     STREAM,
+    DASHBOARD,
 }
 
 @Composable
@@ -48,6 +49,8 @@ fun CloudGamingApp() {
     var games by remember { mutableStateOf<List<GameInfo>>(emptyList()) }
     var isLoadingGames by remember { mutableStateOf(false) }
     var gameError by remember { mutableStateOf<String?>(null) }
+    var isConnectingCloud by remember { mutableStateOf(false) }
+    var cloudError by remember { mutableStateOf<String?>(null) }
 
     DisposableEffect(Unit) {
         onDispose {
@@ -89,6 +92,21 @@ fun CloudGamingApp() {
         loadGames()
     }
 
+    fun connectToCloud() {
+        isConnectingCloud = true
+        cloudError = null
+        scope.launch {
+            val success = connection.connectToCloud()
+            isConnectingCloud = false
+            if (success) {
+                selectedConsole = null
+                currentScreen = Screen.DASHBOARD
+            } else {
+                cloudError = "Could not connect to cloud server."
+            }
+        }
+    }
+
     fun launchGame(game: GameInfo) {
         selectedGame = game
         currentScreen = Screen.STREAM
@@ -104,6 +122,10 @@ fun CloudGamingApp() {
                 currentScreen = Screen.DISCOVERY
                 selectedConsole = null
                 games = emptyList()
+                connection.disconnect()
+            }
+            Screen.DASHBOARD -> {
+                currentScreen = Screen.DISCOVERY
                 connection.disconnect()
             }
             Screen.DISCOVERY -> {}
@@ -127,6 +149,9 @@ fun CloudGamingApp() {
                     if (isScanning) stopScanning() else startScanning()
                 },
                 onConnect = ::connectToConsole,
+                onConnectCloud = ::connectToCloud,
+                isConnectingCloud = isConnectingCloud,
+                cloudError = cloudError,
             )
 
             Screen.LIBRARY -> GameLibraryScreen(
@@ -143,6 +168,13 @@ fun CloudGamingApp() {
                 gameTitle = selectedGame?.title ?: "Game",
                 streamUrl = connection.getStreamUrl("/stream"),
                 onBack = ::navigateBack,
+            )
+
+            Screen.DASHBOARD -> DashboardScreen(
+                dashboardUrl = connection.getDashboardUrl(),
+                consoleName = connection.cloudServer?.name ?: "Console",
+                onBack = ::navigateBack,
+                onLaunchGame = ::launchGame,
             )
         }
     }
