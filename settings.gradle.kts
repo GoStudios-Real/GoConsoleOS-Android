@@ -1,4 +1,4 @@
-pluginManagement {
+﻿pluginManagement {
     repositories {
         google()
         mavenCentral()
@@ -23,3 +23,4 @@ include(":apps:account")
 include(":apps:goai")
 include(":apps:watch")
 include(":apps:cloudgaming")
+include(":apps:govr")
