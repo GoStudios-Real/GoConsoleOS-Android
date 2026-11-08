@@ -86,3 +86,10 @@ Copyright © 2026 GoStudios. All rights reserved.
 Proprietary GoStudios software. Provided for educational and personal use; redistribution or commercial use requires permission.
 
 **GoConsoleOS™** and the **GoConsoleOS logo** are trademarks of GoStudios. Other product names and trademarks are the property of their respective owners.
+
+---
+
+## OpenCode
+
+This repository is maintained with [OpenCode](https://opencode.ai).
+Hub: https://gostudios-real.github.io/
